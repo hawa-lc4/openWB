@@ -1,3 +1,7 @@
+Nachfolgend die Original README.md der Sourcen-Quelle mit Bitte zur freundlichen Beachtung.
+Meine eigenen Anmerkungen zu meinen Änderungen finden Sie ganz am Ende des Dokuments.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # openWB
 
 
@@ -179,5 +183,23 @@ Fronius bietet eine Json API an. Diese wird hier auf die Werte die gebraucht wer
 	pv_kwh=$(echo $pv_watt_tmp | jq '.Body.Data.TOTAL_ENERGY.Values' | sed '2!d' |sed 's/.*: //' )
 	#Dieser Wert wird nun in die ramdisk gespeichert
 	echo $pv_kwh > /var/www/html/openWB/ramdisk/pvkwh
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Anmerkungen von hawa-lc4 zu eigenen Anpassungen und Änderungen.
+Mein Aufbau ist eine Heidelberg Energy Control die mit dem Software Projekt wbec von steff393 gesteuert wird.
+Wie in wbec möglich ist der Wallbox eine Phasenumschaltung vorgeschaltet.
+Übergeordnet sorgt openWB für das Energiemanagement, zur Phasenumschaltung wurden Teile des Projekts von matzempc implementiert.
+
+Datei:                          Änderung:
+runs/u1p3pgoe.py                Anpassung der http Aufrufe zur Kommunikation mit wbec und goEmulator über webserver Interface zur Phasenumschaltung
+runs/u1p3pcheck.sh              keine weiteren Anpassungen, Original von matzempc
+runs/pubmqtt.sh                 Meine Hardware liefert keine Werte für die CPU-Temperatur. Änderung Zeile 296, entfernen von " | bc".
+                                Solche Aufrufe des bc sind für die vielfach im openWB Forum diskutierten Fehlermeldungen
+                                in der openWB.log "(standard_in) 1: syntax error" verantwotlich.
+
+web/tools/raspbian_ARM.php      Anpassung an meine Hardware (siehe commit 0a16d38).
+web/settings/systeminfo.php     Anpassung an meine Hardware (siehe commit 3d0e85d).
 
 
